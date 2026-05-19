@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Accommodation>
+@{
+    ViewData["Title"] = "Підтвердження оплат";
+}
+
+<h2>💳 Підтвердження оплат</h2>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-warning mt-3">⚠️ @ViewBag.Message</div>
+}
+else if (!Model.Any())
+{
+    <div class="alert alert-info mt-3">Немає даних про проживання.</div>
+}
+else
+{
+    <p class="text-muted">Нижче відображено підтвердження оплат на основі вашого проживання.</p>
+
+    foreach (var item in Model)
+    {
+        var isActive = item.PrDataVysel == null;
+        <div class="card shadow-sm mb-3">
+            <div class="card-header fw-bold">
+                Гуртожиток №@item.Ki?.Gu?.GuNomer — Кімната №@item.Ki?.KiNomer
+            </div>
+            <div class="card-body">
+                <h6 class="text-success fw-bold">✅ Підтвердження оплати за гуртожиток</h6>
+                <dl class="row">
+                    <dt class="col-sm-4">Період</dt>
+                    <dd class="col-sm-8">
+                        @item.PrDataZasel.ToString("dd.MM.yyyy") —
+                        @(item.PrDataVysel?.ToString("dd.MM.yyyy") ?? "тепер")
+                    </dd>
+                    <dt class="col-sm-4">Статус оплати</dt>
+                    <dd class="col-sm-8">
+                        @if (isActive)
+                        {
+                            <span class="badge bg-success">Активне проживання — оплачено</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Завершено</span>
+                        }
+                    </dd>
+                </dl>
+
+                <hr />
+
+                <h6 class="text-primary fw-bold">💡 Підтвердження оплати за світло</h6>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Кімната</dt>
+                    <dd class="col-sm-8">№@item.Ki?.KiNomer, @item.Ki?.KiPoverh поверх</dd>
+                    <dt class="col-sm-4">Статус</dt>
+                    <dd class="col-sm-8">
+                        @if (isActive)
+                        {
+                            <span class="badge bg-success">Оплачено</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Завершено</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    }
+}
+
+<a asp-action="StudentHome" class="btn btn-secondary mt-2">← Назад</a>

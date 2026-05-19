@@ -1,12 +1,12 @@
 ﻿using DormDomain.Model;
 using DormInfrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DormInfrastructure.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class FacultyController : Controller
     {
         private readonly DbDormContext _context;
@@ -16,99 +16,91 @@ namespace DormInfrastructure.Controllers
             _context = context;
         }
 
-        // GET: Faculty
         public async Task<IActionResult> Index()
         {
             return View(await _context.Faculties.ToListAsync());
         }
 
-        // GET: Faculty/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
-
             var faculty = await _context.Faculties
                 .Include(f => f.Departments)
                 .Include(f => f.Students)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
             if (faculty == null) return NotFound();
-
             return View(faculty);
         }
 
-        // GET: Faculty/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Faculty/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("FaName,FaInformation,FaTelefon,FaKorpus,FaDekan")] Faculty faculty)
+            string FaName, string? FaInformation,
+            string? FaTelefon, string? FaKorpus, string? FaDekan)
         {
-            if (ModelState.IsValid)
+            var faculty = new Faculty
             {
-                _context.Add(faculty);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(faculty);
+                FaName = FaName,
+                FaInformation = FaInformation,
+                FaTelefon = FaTelefon,
+                FaKorpus = FaKorpus,
+                FaDekan = FaDekan
+            };
+            _context.Add(faculty);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Faculty/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
-
             var faculty = await _context.Faculties.FindAsync(id);
             if (faculty == null) return NotFound();
-
             return View(faculty);
         }
 
-        // POST: Faculty/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
-            [Bind("Id,FaName,FaInformation,FaTelefon,FaKorpus,FaDekan")] Faculty faculty)
+            string FaName, string? FaInformation,
+            string? FaTelefon, string? FaKorpus, string? FaDekan)
         {
-            if (id != faculty.Id) return NotFound();
+            var faculty = await _context.Faculties.FindAsync(id);
+            if (faculty == null) return NotFound();
 
-            if (ModelState.IsValid)
+            faculty.FaName = FaName;
+            faculty.FaInformation = FaInformation;
+            faculty.FaTelefon = FaTelefon;
+            faculty.FaKorpus = FaKorpus;
+            faculty.FaDekan = FaDekan;
+
+            try
             {
-                try
-                {
-                    _context.Update(faculty);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Faculties.Any(e => e.Id == id))
-                        return NotFound();
-                    throw;
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(faculty);
+                await _context.SaveChangesAsync();
             }
-            return View(faculty);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Faculties.Any(e => e.Id == id)) return NotFound();
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Faculty/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
-
             var faculty = await _context.Faculties
                 .FirstOrDefaultAsync(m => m.Id == id);
-
             if (faculty == null) return NotFound();
-
             return View(faculty);
         }
 
-        // POST: Faculty/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

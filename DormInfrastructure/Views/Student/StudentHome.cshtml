@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Особистий кабінет";
+}
+
+<div class="text-center mt-4">
+    <h2>👋 Вітаємо, @ViewBag.FullName!</h2>
+    <p class="text-muted">Ви увійшли як студент.</p>
+</div>
+
+@if (!(bool)ViewBag.IsLinked)
+{
+    <div class="alert alert-warning mt-3 text-center">
+        ⚠️ Ваш акаунт ще не прив'язаний до запису студента в системі.<br />
+        Зверніться до адміністратора — він знайде вас у списку студентів і прив'яже акаунт.
+    </div>
+}
+
+<div class="row mt-4 g-3 justify-content-center">
+    <div class="col-md-4">
+        <a asp-controller="Student" asp-action="MyAccommodation" class="text-decoration-none">
+            <div class="card shadow-sm h-100 text-center p-4">
+                <div style="font-size:3rem">🏠</div>
+                <h5 class="mt-2">Моє проживання</h5>
+                <p class="text-muted small">Перегляд даних про заселення та кімнату</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="Student" asp-action="MyPayments" class="text-decoration-none">
+            <div class="card shadow-sm h-100 text-center p-4">
+                <div style="font-size:3rem">💳</div>
+                <h5 class="mt-2">Підтвердження оплат</h5>
+                <p class="text-muted small">Перегляд підтвердження оплати за гуртожиток та світло</p>
+            </div>
+        </a>
+    </div>
+</div>

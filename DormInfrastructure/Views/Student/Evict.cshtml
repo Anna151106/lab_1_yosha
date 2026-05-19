@@ -1,0 +1,16 @@
+﻿@model Student
+@{
+    ViewData["Title"] = "Виселити студента";
+}
+
+<h2>Виселити студента?</h2>
+<div class="alert alert-warning">
+    Ви збираєтесь виселити студента <strong>@Model.StPib</strong>.
+    Дата виселення буде встановлена як сьогоднішня.
+</div>
+
+<form asp-action="Evict" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Так, виселити</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Скасувати</a>
+</form>

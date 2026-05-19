@@ -1,13 +1,13 @@
 ﻿using DormDomain.Model;
 using DormInfrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DormInfrastructure.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class DepartmentController : Controller
     {
         private readonly DbDormContext _context;
@@ -17,111 +17,95 @@ namespace DormInfrastructure.Controllers
             _context = context;
         }
 
-        // GET: Department
         public async Task<IActionResult> Index()
         {
             var departments = _context.Departments.Include(d => d.Fa);
             return View(await departments.ToListAsync());
         }
 
-        // GET: Department/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
-
             var department = await _context.Departments
                 .Include(d => d.Fa)
                 .Include(d => d.Students)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
             if (department == null) return NotFound();
-
             return View(department);
         }
 
-        // GET: Department/Create
         public IActionResult Create()
         {
             ViewData["FaId"] = new SelectList(_context.Faculties, "Id", "FaName");
             return View();
         }
 
-        // POST: Department/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("FaId,KaName,KaInformation,KaTelefon,KaZaviduvach")] Department department)
+            int FaId, string KaName, string? KaInformation,
+            string? KaTelefon, string? KaZaviduvach)
         {
-            // ВИПРАВЛЕННЯ: Видаляємо навігаційну властивість з перевірки валідації
-            ModelState.Remove("Fa");
-
-            if (ModelState.IsValid)
+            var department = new Department
             {
-                _context.Add(department);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["FaId"] = new SelectList(_context.Faculties, "Id", "FaName", department.FaId);
-            return View(department);
+                FaId = FaId,
+                KaName = KaName,
+                KaInformation = KaInformation,
+                KaTelefon = KaTelefon,
+                KaZaviduvach = KaZaviduvach
+            };
+            _context.Add(department);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Department/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
-
             var department = await _context.Departments.FindAsync(id);
             if (department == null) return NotFound();
-
             ViewData["FaId"] = new SelectList(_context.Faculties, "Id", "FaName", department.FaId);
             return View(department);
         }
 
-        // POST: Department/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
-            [Bind("Id,FaId,KaName,KaInformation,KaTelefon,KaZaviduvach")] Department department)
+            int FaId, string KaName, string? KaInformation,
+            string? KaTelefon, string? KaZaviduvach)
         {
-            if (id != department.Id) return NotFound();
+            var department = await _context.Departments.FindAsync(id);
+            if (department == null) return NotFound();
 
-            // ВИПРАВЛЕННЯ: Видаляємо навігаційну властивість з перевірки валідації при редагуванні
-            ModelState.Remove("Fa");
+            department.FaId = FaId;
+            department.KaName = KaName;
+            department.KaInformation = KaInformation;
+            department.KaTelefon = KaTelefon;
+            department.KaZaviduvach = KaZaviduvach;
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(department);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Departments.Any(e => e.Id == id))
-                        return NotFound();
-                    throw;
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(department);
+                await _context.SaveChangesAsync();
             }
-            ViewData["FaId"] = new SelectList(_context.Faculties, "Id", "FaName", department.FaId);
-            return View(department);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Departments.Any(e => e.Id == id)) return NotFound();
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Department/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
-
             var department = await _context.Departments
                 .Include(d => d.Fa)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
             if (department == null) return NotFound();
-
             return View(department);
         }
 
-        // POST: Department/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

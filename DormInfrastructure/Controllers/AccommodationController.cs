@@ -1,14 +1,13 @@
 ﻿using DormDomain.Model;
 using DormInfrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DormInfrastructure.Controllers
 {
-    [Authorize]
-    
+    [Authorize(Roles = "Admin")]
     public class AccommodationController : Controller
     {
         private readonly DbDormContext _context;
@@ -18,7 +17,6 @@ namespace DormInfrastructure.Controllers
             _context = context;
         }
 
-        // GET: Accommodation
         public async Task<IActionResult> Index()
         {
             var accommodations = _context.Accommodations
@@ -27,111 +25,100 @@ namespace DormInfrastructure.Controllers
             return View(await accommodations.ToListAsync());
         }
 
-        // GET: Accommodation/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
-
             var accommodation = await _context.Accommodations
                 .Include(a => a.Ki).ThenInclude(r => r.Gu)
                 .Include(a => a.St)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
             if (accommodation == null) return NotFound();
-
             return View(accommodation);
         }
 
-        // GET: Accommodation/Create
         public IActionResult Create()
         {
-            ViewData["KiId"] = new SelectList(_context.Rooms, "Id", "KiNomer");
+            ViewData["KiId"] = new SelectList(
+                _context.Rooms.Include(r => r.Gu).Select(r => new
+                {
+                    r.Id,
+                    Display = "Гурт. №" + r.Gu.GuNomer + " / Кімн. №" + r.KiNomer
+                }), "Id", "Display");
             ViewData["StId"] = new SelectList(_context.Students, "Id", "StPib");
             return View();
         }
 
-        // POST: Accommodation/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("KiId,StId,PrDataZasel,PrDataVysel")] Accommodation accommodation)
+            int KiId, int StId,
+            DateOnly PrDataZasel, DateOnly? PrDataVysel)
         {
-            // ВИПРАВЛЕННЯ: Ігноруємо навігаційні об'єкти Кімнати та Студента при валідації заселення
-            ModelState.Remove("Ki");
-            ModelState.Remove("St");
-
-            if (ModelState.IsValid)
+            var accommodation = new Accommodation
             {
-                _context.Add(accommodation);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["KiId"] = new SelectList(_context.Rooms, "Id", "KiNomer", accommodation.KiId);
-            ViewData["StId"] = new SelectList(_context.Students, "Id", "StPib", accommodation.StId);
-            return View(accommodation);
+                KiId = KiId,
+                StId = StId,
+                PrDataZasel = PrDataZasel,
+                PrDataVysel = PrDataVysel
+            };
+            _context.Add(accommodation);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Accommodation/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
-
             var accommodation = await _context.Accommodations.FindAsync(id);
             if (accommodation == null) return NotFound();
-
-            ViewData["KiId"] = new SelectList(_context.Rooms, "Id", "KiNomer", accommodation.KiId);
+            ViewData["KiId"] = new SelectList(
+                _context.Rooms.Include(r => r.Gu).Select(r => new
+                {
+                    r.Id,
+                    Display = "Гурт. №" + r.Gu.GuNomer + " / Кімн. №" + r.KiNomer
+                }), "Id", "Display", accommodation.KiId);
             ViewData["StId"] = new SelectList(_context.Students, "Id", "StPib", accommodation.StId);
             return View(accommodation);
         }
 
-        // POST: Accommodation/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
-            [Bind("Id,KiId,StId,PrDataZasel,PrDataVysel")] Accommodation accommodation)
+            int KiId, int StId,
+            DateOnly PrDataZasel, DateOnly? PrDataVysel)
         {
-            if (id != accommodation.Id) return NotFound();
+            var accommodation = await _context.Accommodations.FindAsync(id);
+            if (accommodation == null) return NotFound();
 
-            // ВИПРАВЛЕННЯ: Ігноруємо навігаційні об'єкти при редагуванні
-            ModelState.Remove("Ki");
-            ModelState.Remove("St");
+            accommodation.KiId = KiId;
+            accommodation.StId = StId;
+            accommodation.PrDataZasel = PrDataZasel;
+            accommodation.PrDataVysel = PrDataVysel;
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(accommodation);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Accommodations.Any(e => e.Id == id))
-                        return NotFound();
-                    throw;
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(accommodation);
+                await _context.SaveChangesAsync();
             }
-            ViewData["KiId"] = new SelectList(_context.Rooms, "Id", "KiNomer", accommodation.KiId);
-            ViewData["StId"] = new SelectList(_context.Students, "Id", "StPib", accommodation.StId);
-            return View(accommodation);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Accommodations.Any(e => e.Id == id)) return NotFound();
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: Accommodation/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
-
             var accommodation = await _context.Accommodations
-                .Include(a => a.Ki)
+                .Include(a => a.Ki).ThenInclude(r => r.Gu)
                 .Include(a => a.St)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
             if (accommodation == null) return NotFound();
-
             return View(accommodation);
         }
 
-        // POST: Accommodation/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -1,0 +1,22 @@
+﻿@model Student
+@{
+    ViewData["Title"] = "Переселити студента";
+}
+
+<h2>Переселити студента</h2>
+<p class="text-muted">Студент: <strong>@ViewBag.StudentName</strong></p>
+
+<div class="row">
+    <div class="col-md-5">
+        <form asp-action="Relocate" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="mb-3">
+                <label class="form-label fw-bold">Оберіть нову кімнату:</label>
+                <select name="newRoomId" class="form-select" asp-items="ViewBag.KiId">
+                    <option value="">-- Оберіть кімнату --</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Переселити</button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Скасувати</a>
+        </form>
+    </div></div>

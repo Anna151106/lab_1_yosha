@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Accommodation>
+@{
+    ViewData["Title"] = "Моє проживання";
+}
+
+<h2>🏠 Моє проживання</h2>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-warning mt-3">
+        ⚠️ @ViewBag.Message
+    </div>
+}
+else if (!Model.Any())
+{
+    <div class="alert alert-info mt-3">
+        У вас немає записів про проживання в системі.
+    </div>
+}
+else
+{
+    foreach (var item in Model)
+    {
+        var isActive = item.PrDataVysel == null;
+        <div class="card shadow-sm mb-3 @(isActive ? "border-success" : "")">
+            <div class="card-header fw-bold d-flex justify-content-between">
+                <span>Гуртожиток №@item.Ki?.Gu?.GuNomer — Кімната №@item.Ki?.KiNomer</span>
+                @if (isActive)
+                {
+                    <span class="badge bg-success">Зараз мешкаєте</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">Завершено</span>
+                }
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Адреса гуртожитку</dt>
+                    <dd class="col-sm-8">@item.Ki?.Gu?.GuAdresa</dd>
+                    <dt class="col-sm-4">Поверх</dt>
+                    <dd class="col-sm-8">@item.Ki?.KiPoverh</dd>
+                    <dt class="col-sm-4">Місткість кімнати</dt>
+                    <dd class="col-sm-8">@item.Ki?.KiMistkist осіб</dd>
+                    <dt class="col-sm-4">Дата заселення</dt>
+                    <dd class="col-sm-8">@item.PrDataZasel.ToString("dd.MM.yyyy")</dd>
+                    <dt class="col-sm-4">Дата виселення</dt>
+                    <dd class="col-sm-8">@(item.PrDataVysel?.ToString("dd.MM.yyyy") ?? "—")</dd>
+                </dl>
+            </div>
+        </div>
+    }
+}
+
+<a asp-action="StudentHome" class="btn btn-secondary mt-2">← Назад</a>

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using DormInfrastructure.Models;
 using ClosedXML.Excel;
 using DormDomain.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DormInfrastructure.Controllers
 {
@@ -16,17 +17,10 @@ namespace DormInfrastructure.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
+        public IActionResult Privacy() => View();
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        // GET: Home/Charts
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Charts()
         {
             var studentsByFaculty = await _context.Faculties
@@ -54,10 +48,7 @@ namespace DormInfrastructure.Controllers
             return View();
         }
 
-        // ============================================================
-        // ЕКСПОРТ
-        // ============================================================
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ExportFacultyToExcel()
         {
             var data = await _context.Faculties
@@ -66,7 +57,6 @@ namespace DormInfrastructure.Controllers
 
             using var workbook = new XLWorkbook();
             var ws = workbook.Worksheets.Add("Факультети");
-
             ws.Cell(1, 1).Value = "Назва факультету";
             ws.Cell(1, 2).Value = "Кількість студентів";
             ws.Row(1).Style.Font.Bold = true;
@@ -88,6 +78,7 @@ namespace DormInfrastructure.Controllers
                 "Zvit_Faculties.xlsx");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ExportDormsToExcel()
         {
             var data = await _context.Dorms
@@ -101,7 +92,6 @@ namespace DormInfrastructure.Controllers
 
             using var workbook = new XLWorkbook();
             var ws = workbook.Worksheets.Add("Гуртожитки");
-
             ws.Cell(1, 1).Value = "Номер гуртожитку";
             ws.Cell(1, 2).Value = "Кількість кімнат";
             ws.Cell(1, 3).Value = "Поточних мешканців";
@@ -125,16 +115,11 @@ namespace DormInfrastructure.Controllers
                 "Zvit_Dorms.xlsx");
         }
 
-        // ============================================================
-        // ІМПОРТ
-        // ============================================================
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult Import()
-        {
-            return View();
-        }
+        public IActionResult Import() => View();
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> ImportStudents(IFormFile file)
         {
@@ -171,47 +156,36 @@ namespace DormInfrastructure.Controllers
                     var department = await _context.Departments
                         .FirstOrDefaultAsync(d => d.KaName == kaName);
 
-                    if (faculty == null)
-                    {
-                        errors.Add($"Рядок {excelRow.RowNumber()}: факультет '{faName}' не знайдено.");
-                        continue;
-                    }
-                    if (department == null)
-                    {
-                        errors.Add($"Рядок {excelRow.RowNumber()}: кафедра '{kaName}' не знайдено.");
-                        continue;
-                    }
+                    if (faculty == null) { errors.Add($"Рядок {excelRow.RowNumber()}: факультет '{faName}' не знайдено."); continue; }
+                    if (department == null) { errors.Add($"Рядок {excelRow.RowNumber()}: кафедра '{kaName}' не знайдено."); continue; }
 
-                    var student = new Student
+                    _context.Students.Add(new Student
                     {
                         StPib = pib,
                         StKurs = int.TryParse(kursStr, out var k) ? k : null,
                         StTelefon = telefon,
                         FaId = faculty.Id,
                         KaId = department.Id
-                    };
-
-                    _context.Students.Add(student);
+                    });
                     imported++;
                 }
                 catch (Exception ex)
                 {
-                    errors.Add($"Рядок {excelRow.RowNumber()}: помилка — {ex.Message}");
+                    errors.Add($"Рядок {excelRow.RowNumber()}: {ex.Message}");
                 }
             }
 
             await _context.SaveChangesAsync();
-
             ViewBag.Success = $"Успішно імпортовано: {imported} студентів.";
             ViewBag.Errors = errors;
             return View("Import");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult DownloadTemplate()
         {
             using var workbook = new XLWorkbook();
             var ws = workbook.Worksheets.Add("Студенти");
-
             ws.Cell(1, 1).Value = "ПІБ";
             ws.Cell(1, 2).Value = "Курс";
             ws.Cell(1, 3).Value = "Телефон";

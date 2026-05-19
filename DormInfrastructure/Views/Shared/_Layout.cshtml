@@ -21,7 +21,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Dorm" asp-action="Index">Гуртожитки</a>
@@ -48,12 +48,34 @@
                                 <a class="nav-link text-dark" asp-controller="Home" asp-action="Import">📂 Імпорт</a>
                             </li>
                         }
+                        @if (User.IsInRole("Student"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Student" asp-action="StudentHome">🏠 Кабінет</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Student" asp-action="MyAccommodation">Моє проживання</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Student" asp-action="MyPayments">💳 Оплати</a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <span class="nav-link text-dark">👤 @User.Identity.Name</span>
+                                <span class="nav-link text-dark">
+                                    👤 @User.Identity.Name
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <span class="badge bg-danger ms-1">Admin</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-primary ms-1">Студент</span>
+                                    }
+                                </span>
                             </li>
                             <li class="nav-item">
                                 <form asp-controller="Account" asp-action="Logout" method="post">
@@ -75,13 +97,11 @@
             </div>
         </nav>
     </header>
-
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2026 - Система управління гуртожитком
