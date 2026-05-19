@@ -1,0 +1,34 @@
+﻿@model Dorm
+@{
+    ViewData["Title"] = "Деталі гуртожитку";
+}
+
+<h2>Гуртожиток №@Model.GuNomer</h2>
+<dl class="row">
+    <dt class="col-sm-3">Адреса</dt>
+    <dd class="col-sm-9">@Model.GuAdresa</dd>
+    <dt class="col-sm-3">Поверхів</dt>
+    <dd class="col-sm-9">@Model.GuKilkistPoverh</dd>
+    <dt class="col-sm-3">Комендант</dt>
+    <dd class="col-sm-9">@Model.GuKomendant</dd>
+    <dt class="col-sm-3">Інформація</dt>
+    <dd class="col-sm-9">@Model.GuInformation</dd>
+</dl>
+
+<h4>Кімнати</h4>
+<table class="table table-sm">
+    <thead><tr><th>Номер</th><th>Поверх</th><th>Місткість</th></tr></thead>
+    <tbody>
+        @foreach (var r in Model.Rooms)
+        {
+            <tr>
+                <td>@r.KiNomer</td>
+                <td>@r.KiPoverh</td>
+                <td>@r.KiMistkist</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Редагувати</a>
+<a asp-action="Index" class="btn btn-secondary">Назад</a>

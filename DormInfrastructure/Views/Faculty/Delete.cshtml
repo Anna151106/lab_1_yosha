@@ -1,0 +1,19 @@
+﻿@model Faculty
+@{
+    ViewData["Title"] = "Видалити факультет";
+}
+
+<h2>Видалити факультет?</h2>
+<dl class="row">
+    <dt class="col-sm-3">Назва</dt>
+    <dd class="col-sm-9">@Model.FaName</dd>
+    <dt class="col-sm-3">Декан</dt>
+    <dd class="col-sm-9">@Model.FaDekan</dd>
+    <dt class="col-sm-3">Корпус</dt>
+    <dd class="col-sm-9">@Model.FaKorpus</dd>
+</dl>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Так, видалити</button>
+    <a asp-action="Index" class="btn btn-secondary">Скасувати</a>
+</form>

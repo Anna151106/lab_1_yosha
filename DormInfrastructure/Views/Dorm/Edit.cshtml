@@ -1,0 +1,44 @@
+﻿@model Dorm
+@{
+    ViewData["Title"] = "Редагувати гуртожиток";
+}
+
+<h2>Редагувати гуртожиток</h2>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="mb-3">
+                <label asp-for="GuNomer" class="form-label">Номер</label>
+                <input asp-for="GuNomer" class="form-control" />
+                <span asp-validation-for="GuNomer" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="GuAdresa" class="form-label">Адреса</label>
+                <input asp-for="GuAdresa" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="GuKilkistPoverh" class="form-label">Кількість поверхів</label>
+                <input asp-for="GuKilkistPoverh" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="GuKomendant" class="form-label">Комендант</label>
+                <input asp-for="GuKomendant" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="GuInformation" class="form-label">Інформація</label>
+                <textarea asp-for="GuInformation" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+            <a asp-action="Index" class="btn btn-secondary">Скасувати</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

@@ -1,0 +1,37 @@
+﻿@model Student
+@{
+    ViewData["Title"] = "Деталі студента";
+}
+
+<h2>@Model.StPib</h2>
+<dl class="row">
+    <dt class="col-sm-3">Курс</dt>
+    <dd class="col-sm-9">@Model.StKurs</dd>
+    <dt class="col-sm-3">Факультет</dt>
+    <dd class="col-sm-9">@Model.Fa?.FaName</dd>
+    <dt class="col-sm-3">Кафедра</dt>
+    <dd class="col-sm-9">@Model.Ka?.KaName</dd>
+    <dt class="col-sm-3">Телефон</dt>
+    <dd class="col-sm-9">@Model.StTelefon</dd>
+    <dt class="col-sm-3">Дата народження</dt>
+    <dd class="col-sm-9">@Model.StDataNarodz?.ToString("dd.MM.yyyy")</dd>
+</dl>
+
+<h4>Проживання</h4>
+<table class="table table-sm">
+    <thead><tr><th>Кімната</th><th>Гуртожиток</th><th>Дата заселення</th><th>Дата виселення</th></tr></thead>
+    <tbody>
+        @foreach (var a in Model.Accommodations)
+        {
+            <tr>
+                <td>@a.Ki?.KiNomer</td>
+                <td>@a.Ki?.Gu?.GuNomer</td>
+                <td>@a.PrDataZasel.ToString("dd.MM.yyyy")</td>
+                <td>@(a.PrDataVysel?.ToString("dd.MM.yyyy") ?? "—")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Редагувати</a>
+<a asp-action="Index" class="btn btn-secondary">Назад</a>

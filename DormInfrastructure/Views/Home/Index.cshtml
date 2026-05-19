@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Головна";
+}
+
+<div class="home-hero">
+    <div class="hero-content">
+        <div class="hero-icon">🏠</div>
+        <h1 class="hero-title">Система управління гуртожитком</h1>
+        <p class="hero-subtitle">Зручне адміністрування студентського проживання</p>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+
+    <a asp-controller="Dorm" asp-action="Index" class="dash-card">
+        <div class="dash-icon">🏢</div>
+        <div class="dash-info">
+            <div class="dash-title">Гуртожитки</div>
+            <div class="dash-desc">Перегляд та управління корпусами</div>
+        </div>
+        <div class="dash-arrow">→</div>
+    </a>
+
+    <a asp-controller="Room" asp-action="Index" class="dash-card">
+        <div class="dash-icon">🚪</div>
+        <div class="dash-info">
+            <div class="dash-title">Кімнати</div>
+            <div class="dash-desc">Кімнати, поверхи, місткість</div>
+        </div>
+        <div class="dash-arrow">→</div>
+    </a>
+
+    <a asp-controller="Student" asp-action="Index" class="dash-card">
+        <div class="dash-icon">🎓</div>
+        <div class="dash-info">
+            <div class="dash-title">Студенти</div>
+            <div class="dash-desc">Реєстрація та дані студентів</div>
+        </div>
+        <div class="dash-arrow">→</div>
+    </a>
+
+    <a asp-controller="Accommodation" asp-action="Index" class="dash-card dash-card--accent">
+        <div class="dash-icon">🛏️</div>
+        <div class="dash-info">
+            <div class="dash-title">Проживання</div>
+            <div class="dash-desc">Заселення та виселення</div>
+        </div>
+        <div class="dash-arrow">→</div>
+    </a>
+
+    <a asp-controller="Faculty" asp-action="Index" class="dash-card">
+        <div class="dash-icon">🏛️</div>
+        <div class="dash-info">
+            <div class="dash-title">Факультети</div>
+            <div class="dash-desc">Список факультетів університету</div>
+        </div>
+        <div class="dash-arrow">→</div>
+    </a>
+
+    <a asp-controller="Department" asp-action="Index" class="dash-card">
+        <div class="dash-icon">📚</div>
+        <div class="dash-info">
+            <div class="dash-title">Кафедри</div>
+            <div class="dash-desc">Кафедри та їх інформація</div>
+        </div>
+        <div class="dash-arrow">→</div>
+    </a>
+
+    <a asp-controller="Home" asp-action="Charts" class="dash-card dash-card--dark">
+        <div class="dash-icon">📊</div>
+        <div class="dash-info">
+            <div class="dash-title">Аналітика</div>
+            <div class="dash-desc">Діаграми та статистика</div>
+        </div>
+        <div class="dash-arrow">→</div>
+    </a>
+
+</div>

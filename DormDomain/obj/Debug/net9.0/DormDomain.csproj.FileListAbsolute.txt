@@ -1,0 +1,12 @@
+C:\Users\user\source\repos\DormMVC\DormDomain\bin\Debug\net9.0\DormDomain.deps.json
+C:\Users\user\source\repos\DormMVC\DormDomain\bin\Debug\net9.0\DormDomain.dll
+C:\Users\user\source\repos\DormMVC\DormDomain\bin\Debug\net9.0\DormDomain.pdb
+C:\Users\user\source\repos\DormMVC\DormDomain\obj\Debug\net9.0\DormDomain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\source\repos\DormMVC\DormDomain\obj\Debug\net9.0\DormDomain.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\DormMVC\DormDomain\obj\Debug\net9.0\DormDomain.AssemblyInfo.cs
+C:\Users\user\source\repos\DormMVC\DormDomain\obj\Debug\net9.0\DormDomain.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\DormMVC\DormDomain\obj\Debug\net9.0\DormDomain.sourcelink.json
+C:\Users\user\source\repos\DormMVC\DormDomain\obj\Debug\net9.0\DormDomain.dll
+C:\Users\user\source\repos\DormMVC\DormDomain\obj\Debug\net9.0\refint\DormDomain.dll
+C:\Users\user\source\repos\DormMVC\DormDomain\obj\Debug\net9.0\DormDomain.pdb
+C:\Users\user\source\repos\DormMVC\DormDomain\obj\Debug\net9.0\ref\DormDomain.dll

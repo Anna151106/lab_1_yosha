@@ -1,0 +1,19 @@
+﻿@model Dorm
+@{
+    ViewData["Title"] = "Видалити гуртожиток";
+}
+
+<h2>Видалити гуртожиток?</h2>
+<dl class="row">
+    <dt class="col-sm-3">Номер</dt>
+    <dd class="col-sm-9">@Model.GuNomer</dd>
+    <dt class="col-sm-3">Адреса</dt>
+    <dd class="col-sm-9">@Model.GuAdresa</dd>
+    <dt class="col-sm-3">Комендант</dt>
+    <dd class="col-sm-9">@Model.GuKomendant</dd>
+</dl>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Так, видалити</button>
+    <a asp-action="Index" class="btn btn-secondary">Скасувати</a>
+</form>

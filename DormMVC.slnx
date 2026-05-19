@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DormDomain/DormDomain.csproj" />
+  <Project Path="DormInfrastructure/DormInfrastructure.csproj" />
+</Solution>

@@ -1,0 +1,19 @@
+﻿@model Accommodation
+@{
+    ViewData["Title"] = "Видалити запис";
+}
+
+<h2>Видалити запис проживання?</h2>
+<dl class="row">
+    <dt class="col-sm-3">Студент</dt>
+    <dd class="col-sm-9">@Model.St?.StPib</dd>
+    <dt class="col-sm-3">Кімната</dt>
+    <dd class="col-sm-9">@Model.Ki?.KiNomer</dd>
+    <dt class="col-sm-3">Дата заселення</dt>
+    <dd class="col-sm-9">@Model.PrDataZasel.ToString("dd.MM.yyyy")</dd>
+</dl>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Так, видалити</button>
+    <a asp-action="Index" class="btn btn-secondary">Скасувати</a>
+</form>

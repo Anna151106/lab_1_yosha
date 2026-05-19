@@ -1,0 +1,21 @@
+﻿@model Accommodation
+@{
+    ViewData["Title"] = "Деталі проживання";
+}
+
+<h2>Запис про проживання</h2>
+<dl class="row">
+    <dt class="col-sm-3">Студент</dt>
+    <dd class="col-sm-9">@Model.St?.StPib</dd>
+    <dt class="col-sm-3">Кімната</dt>
+    <dd class="col-sm-9">@Model.Ki?.KiNomer</dd>
+    <dt class="col-sm-3">Гуртожиток</dt>
+    <dd class="col-sm-9">@Model.Ki?.Gu?.GuNomer</dd>
+    <dt class="col-sm-3">Дата заселення</dt>
+    <dd class="col-sm-9">@Model.PrDataZasel.ToString("dd.MM.yyyy")</dd>
+    <dt class="col-sm-3">Дата виселення</dt>
+    <dd class="col-sm-9">@(Model.PrDataVysel?.ToString("dd.MM.yyyy") ?? "ще мешкає")</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Редагувати</a>
+<a asp-action="Index" class="btn btn-secondary">Назад</a>

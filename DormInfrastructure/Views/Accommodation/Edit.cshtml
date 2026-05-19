@@ -1,0 +1,44 @@
+﻿@model Accommodation
+@{
+    ViewData["Title"] = "Редагувати проживання";
+}
+
+<h2>Редагувати проживання</h2>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="mb-3">
+                <label asp-for="StId" class="form-label">Студент</label>
+                <select asp-for="StId" class="form-select" asp-items="ViewBag.StId">
+                    <option value="">-- Оберіть студента --</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="KiId" class="form-label">Кімната</label>
+                <select asp-for="KiId" class="form-select" asp-items="ViewBag.KiId">
+                    <option value="">-- Оберіть кімнату --</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PrDataZasel" class="form-label">Дата заселення</label>
+                <input asp-for="PrDataZasel" class="form-control" type="date" />
+                <span asp-validation-for="PrDataZasel" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PrDataVysel" class="form-label">Дата виселення</label>
+                <input asp-for="PrDataVysel" class="form-control" type="date" />
+            </div>
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+            <a asp-action="Index" class="btn btn-secondary">Скасувати</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

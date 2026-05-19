@@ -1,0 +1,34 @@
+﻿@model Room
+@{
+    ViewData["Title"] = "Деталі кімнати";
+}
+
+<h2>Кімната №@Model.KiNomer</h2>
+<dl class="row">
+    <dt class="col-sm-3">Гуртожиток</dt>
+    <dd class="col-sm-9">@Model.Gu?.GuNomer</dd>
+    <dt class="col-sm-3">Поверх</dt>
+    <dd class="col-sm-9">@Model.KiPoverh</dd>
+    <dt class="col-sm-3">Місткість</dt>
+    <dd class="col-sm-9">@Model.KiMistkist</dd>
+    <dt class="col-sm-3">Інформація</dt>
+    <dd class="col-sm-9">@Model.KiInformation</dd>
+</dl>
+
+<h4>Мешканці</h4>
+<table class="table table-sm">
+    <thead><tr><th>ПІБ студента</th><th>Дата заселення</th><th>Дата виселення</th></tr></thead>
+    <tbody>
+        @foreach (var a in Model.Accommodations)
+        {
+            <tr>
+                <td>@a.St?.StPib</td>
+                <td>@a.PrDataZasel.ToString("dd.MM.yyyy")</td>
+                <td>@(a.PrDataVysel?.ToString("dd.MM.yyyy") ?? "—")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Редагувати</a>
+<a asp-action="Index" class="btn btn-secondary">Назад</a>

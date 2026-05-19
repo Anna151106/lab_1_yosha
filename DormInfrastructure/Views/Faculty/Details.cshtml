@@ -1,0 +1,30 @@
+﻿@model Faculty
+@{
+    ViewData["Title"] = "Деталі факультету";
+}
+
+<h2>@Model.FaName</h2>
+<dl class="row">
+    <dt class="col-sm-3">Декан</dt>
+    <dd class="col-sm-9">@Model.FaDekan</dd>
+    <dt class="col-sm-3">Корпус</dt>
+    <dd class="col-sm-9">@Model.FaKorpus</dd>
+    <dt class="col-sm-3">Телефон</dt>
+    <dd class="col-sm-9">@Model.FaTelefon</dd>
+    <dt class="col-sm-3">Інформація</dt>
+    <dd class="col-sm-9">@Model.FaInformation</dd>
+</dl>
+
+<h4>Кафедри</h4>
+<table class="table table-sm">
+    <thead><tr><th>Назва</th><th>Завідувач</th></tr></thead>
+    <tbody>
+        @foreach (var d in Model.Departments)
+        {
+            <tr><td>@d.KaName</td><td>@d.KaZaviduvach</td></tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Редагувати</a>
+<a asp-action="Index" class="btn btn-secondary">Назад</a>

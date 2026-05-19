@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Аналітика";
+
+    var facultyLabels = System.Text.Json.JsonSerializer.Serialize(ViewBag.FacultyLabels ?? new List<string>());
+    var facultyData = System.Text.Json.JsonSerializer.Serialize(ViewBag.FacultyData ?? new List<int>());
+    var dormLabels = System.Text.Json.JsonSerializer.Serialize(ViewBag.DormLabels ?? new List<string>());
+    var roomData = System.Text.Json.JsonSerializer.Serialize(ViewBag.RoomData ?? new List<int>());
+    var accData = System.Text.Json.JsonSerializer.Serialize(ViewBag.AccommodationData ?? new List<int>());
+}
+
+<h2>Аналітика гуртожитку</h2>
+
+<div class="mb-4 d-flex gap-2">
+    <a asp-action="ExportFacultyToExcel" asp-controller="Home" class="btn btn-success d-flex align-items-center gap-2">
+        <i class="bi bi-file-earmark-excel"></i> Завантажити звіт по факультетах (.xlsx)
+    </a>
+    <a asp-action="ExportDormsToExcel" asp-controller="Home" class="btn btn-success d-flex align-items-center gap-2">
+        <i class="bi bi-file-earmark-excel"></i> Завантажити звіт по гуртожитках (.xlsx)
+    </a>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header fw-bold">Студентів по факультетах</div>
+            <div class="card-body">
+                <canvas id="facultyChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header fw-bold">Кімнати та мешканці по гуртожитках</div>
+            <div class="card-body">
+                <canvas id="dormChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Діаграма 1 — студенти по факультетах
+        new Chart(document.getElementById('facultyChart'), {
+        type: 'bar',
+        data: {
+        labels: @Html.Raw(facultyLabels),
+        datasets: [{
+        label: 'Кількість студентів',
+        data: @Html.Raw(facultyData),
+        backgroundColor: 'rgba(15, 52, 96, 0.75)',
+        borderColor: '#0f3460',
+        borderWidth: 1,
+        borderRadius: 6
+        }]
+        },
+        options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+        });
+
+        // Діаграма 2 — кімнати та заселені по гуртожитках
+        new Chart(document.getElementById('dormChart'), {
+        type: 'bar',
+        data: {
+        labels: @Html.Raw(dormLabels),
+        datasets: [
+        {
+        label: 'Кімнат всього',
+        data: @Html.Raw(roomData),
+        backgroundColor: 'rgba(15, 52, 96, 0.75)',
+        borderRadius: 6
+        },
+        {
+        label: 'Зараз мешкає',
+        data: @Html.Raw(accData),
+        backgroundColor: 'rgba(233, 69, 96, 0.75)',
+        borderRadius: 6
+        }
+        ]
+        },
+        options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+        });
+    </script>
+}

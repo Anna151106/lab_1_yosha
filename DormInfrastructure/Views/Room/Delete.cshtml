@@ -1,0 +1,21 @@
+﻿@model Room
+@{
+    ViewData["Title"] = "Видалити кімнату";
+}
+
+<h2>Видалити кімнату?</h2>
+<dl class="row">
+    <dt class="col-sm-3">Номер</dt>
+    <dd class="col-sm-9">@Model.KiNomer</dd>
+    <dt class="col-sm-3">Гуртожиток</dt>
+    <dd class="col-sm-9">@Model.Gu?.GuNomer</dd>
+    <dt class="col-sm-3">Поверх</dt>
+    <dd class="col-sm-9">@Model.KiPoverh</dd>
+    <dt class="col-sm-3">Місткість</dt>
+    <dd class="col-sm-9">@Model.KiMistkist</dd>
+</dl>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Так, видалити</button>
+    <a asp-action="Index" class="btn btn-secondary">Скасувати</a>
+</form>
