@@ -2,9 +2,11 @@
 using DormInfrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DormInfrastructure.Controllers
 {
+    [Authorize]
     public class DormController : Controller
     {
         private readonly DbDormContext _context;

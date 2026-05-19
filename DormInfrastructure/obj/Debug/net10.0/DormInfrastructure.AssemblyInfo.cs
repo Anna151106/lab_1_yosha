@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DormInfrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f193b704dd63cf29749fd67089cf753cea3cf343")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3944d999b8424055dbadb11c38866fcab392ec21")]
 [assembly: System.Reflection.AssemblyProductAttribute("DormInfrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DormInfrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

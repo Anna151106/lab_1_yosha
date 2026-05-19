@@ -3,9 +3,11 @@ using DormInfrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DormInfrastructure.Controllers
 {
+    [Authorize]
     public class RoomController : Controller
     {
         private readonly DbDormContext _context;

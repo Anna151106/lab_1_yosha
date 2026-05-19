@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Імпорт даних";
+}
+
+<h2>Імпорт студентів з Excel</h2>
+
+<div class="row mt-3">
+    <div class="col-md-7">
+        <div class="card shadow-sm mb-3">
+            <div class="card-header fw-bold">⬆ Завантажити файл Excel</div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Файл Excel (.xlsx) повинен мати колонки у такому порядку:<br />
+                    <strong>ПІБ | Курс | Телефон | Назва факультету | Назва кафедри</strong><br />
+                    <small>Перший рядок — заголовок, дані починаються з другого рядка.</small>
+                </p>
+
+                @if (ViewBag.Success != null)
+                {
+                    <div class="alert alert-success">@ViewBag.Success</div>
+                }
+                @if (ViewBag.Errors != null && ((List<string>)ViewBag.Errors).Count > 0)
+                {
+                    <div class="alert alert-warning">
+                        <strong>Помилки при імпорті:</strong>
+                        <ul>
+                            @foreach (var err in (List<string>)ViewBag.Errors)
+                            {
+                                <li>@err</li>
+                            }
+                        </ul>
+                    </div>
+                }
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.Error</div>
+                }
+
+                <form asp-action="ImportStudents" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Оберіть файл Excel:</label>
+                        <input type="file" name="file" accept=".xlsx" class="form-control" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Імпортувати</button>
+                    <a asp-action="Charts" class="btn btn-secondary ms-2">Назад</a>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header fw-bold">⬇ Шаблон для заповнення</div>
+            <div class="card-body">
+                <p class="text-muted">Скачай готовий шаблон і заповни його даними студентів.</p>
+                <a asp-action="DownloadTemplate" class="btn btn-outline-success">⬇ Завантажити шаблон</a>
+            </div>
+        </div>
+    </div>
+</div>

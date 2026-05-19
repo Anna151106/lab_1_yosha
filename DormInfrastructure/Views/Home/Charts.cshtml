@@ -10,15 +10,6 @@
 
 <h2>Аналітика гуртожитку</h2>
 
-<div class="mb-4 d-flex gap-2">
-    <a asp-action="ExportFacultyToExcel" asp-controller="Home" class="btn btn-success d-flex align-items-center gap-2">
-        <i class="bi bi-file-earmark-excel"></i> Завантажити звіт по факультетах (.xlsx)
-    </a>
-    <a asp-action="ExportDormsToExcel" asp-controller="Home" class="btn btn-success d-flex align-items-center gap-2">
-        <i class="bi bi-file-earmark-excel"></i> Завантажити звіт по гуртожитках (.xlsx)
-    </a>
-</div>
-
 <div class="row mt-4">
     <div class="col-md-6 mb-4">
         <div class="card shadow-sm">
@@ -38,10 +29,28 @@
     </div>
 </div>
 
+<div class="row mt-2">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header fw-bold">📁 Робота з файлами</div>
+            <div class="card-body d-flex gap-3 flex-wrap">
+                <a asp-action="ExportFacultyToExcel" asp-controller="Home" class="btn btn-success">
+                    ⬇ Експорт: студенти по факультетах
+                </a>
+                <a asp-action="ExportDormsToExcel" asp-controller="Home" class="btn btn-success">
+                    ⬇ Експорт: звіт по гуртожитках
+                </a>
+                <a asp-action="Import" asp-controller="Home" class="btn btn-outline-primary">
+                    ⬆ Імпорт студентів з Excel
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Діаграма 1 — студенти по факультетах
         new Chart(document.getElementById('facultyChart'), {
         type: 'bar',
         data: {
@@ -62,7 +71,6 @@
         }
         });
 
-        // Діаграма 2 — кімнати та заселені по гуртожитках
         new Chart(document.getElementById('dormChart'), {
         type: 'bar',
         data: {
